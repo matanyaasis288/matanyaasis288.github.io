@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["A5LUNK76Y4.com.asis.kangaroojump"],
+        "components": [
+          { "/": "/kj/c", "comment": "Beat my Daily Run challenge links" },
+          { "/": "/kj/c/*", "comment": "Beat my Daily Run challenge links" }
+        ],
+        "appID": "A5LUNK76Y4.com.asis.kangaroojump",
+        "paths": ["/kj/c", "/kj/c/*"]
+      }
+    ]
+  }
+}
