@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.asis.kangaroojump",
+      "sha256_cert_fingerprints": [
+        "95:D3:1E:B8:61:19:5C:01:36:04:58:30:C8:2E:B8:BE:3E:3E:08:E8:C4:D0:46:CC:05:60:1E:51:68:D8:1B:CB",
+        "75:1F:2A:8B:8E:62:3C:23:17:83:68:28:93:A7:69:D6:9F:E5:D7:D4:6D:85:09:53:0E:D9:60:78:54:04:74:73"
+      ]
+    }
+  }
+]
