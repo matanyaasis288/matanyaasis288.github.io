@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<!-- Nothing loads from anywhere else, and the challenge (after the #) never reaches this server. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'">
+<title>Kangaroo Jump challenge</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; min-height: 100vh; background: linear-gradient(#1a1430, #7a3b4e 60%, #e0874f); color: #fff3d6;
+         font: 17px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; }
+  main { max-width: 420px; margin: 24px 16px; background: #fbf3e2; color: #3a2a1a; border-radius: 8px; padding: 24px 22px;
+         box-shadow: 0 12px 40px rgba(0,0,0,.4); transform: rotate(-1.2deg); }
+  h1 { margin: 0 0 4px; font-size: 26px; color: #c0582c; }
+  .score { font-size: 64px; font-weight: 900; line-height: 1; margin: 12px 0 0; }
+  .muted { color: #8a7a66; }
+  a.btn { display: block; text-align: center; text-decoration: none; font-weight: 900; letter-spacing: .5px; text-transform: uppercase;
+          padding: 14px; border-radius: 8px; margin-top: 12px; }
+  .open { background: #0f6a3c; color: #fff; border: 2px solid #fff; outline: 2px solid #0f6a3c; }
+  .store { background: #f3e3bc; color: #3a2a1a; border: 1.5px solid #c0582c; }
+  .brand { margin-top: 18px; font-weight: 900; color: #c0582c; letter-spacing: 1px; text-align: center; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">Kangaroo Jump</h1>
+  <div id="dare" class="muted">Hop, glide and slide across Australia.</div>
+  <div id="score" class="score" hidden></div>
+  <div id="what" class="muted" hidden></div>
+  <a id="open" class="btn open" href="#" hidden>Play this run</a>
+  <a id="play" class="btn store" href="https://play.google.com/store/apps/details?id=com.asis.kangaroojump">Get it on Google Play</a>
+  <a id="ios" class="btn store" href="https://apps.apple.com/app/id6819964662">Download on the App Store</a>
+  <div class="brand">KANGAROO JUMP</div>
+</main>
+<script>
+(function () {
+  var PKG = 'com.asis.kangaroojump';
+  var PLAY = 'https://play.google.com/store/apps/details?id=' + PKG;
+  var APPSTORE = 'https://apps.apple.com/app/id6819964662';
+  // The challenge rides after the # (or, from older links, after the ?): d=2026-10-10&s=31&n=Matan&v=1&k=xxxx
+  var raw = (location.hash || '').replace(/^#/, '') || (location.search || '').replace(/^\?/, '');
+  var p = {};
+  raw.split('&').forEach(function (kv) {
+    var i = kv.indexOf('=');
+    if (i > 0) { try { p[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1).replace(/\+/g, ' ')); } catch (e) {} }
+  });
+  var ok = /^\d{4}-\d{2}-\d{2}$/.test(p.d || '') && /^\d{1,5}$/.test(p.s || '') && /^[0-9a-z]{4}$/.test(p.k || '');
+  var ua = navigator.userAgent || '';
+  var android = /Android/i.test(ua);
+  var ios = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && 'ontouchend' in document);
+
+  // Play passes the challenge on to the app after a fresh install (Play Install Referrer).
+  var playLink = ok ? PLAY + '&referrer=' + encodeURIComponent(raw) : PLAY;
+  document.getElementById('play').href = playLink;
+
+  if (ok) {
+    var name = (p.n || '').slice(0, 32);
+    var date = new Date(p.d + 'T12:00:00');
+    var day = isNaN(date) ? p.d : date.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+    document.getElementById('title').textContent = (name ? name : 'A friend') + ' dares you!';
+    document.getElementById('dare').textContent = 'Beat this on the Kangaroo Jump Daily Run of ' + day + ':';
+    var score = document.getElementById('score');
+    score.textContent = p.s; score.hidden = false;
+    var what = document.getElementById('what');
+    what.textContent = 'obstacles cleared. Same run, same day: can you go further?'; what.hidden = false;
+
+    var open = document.getElementById('open');
+    open.hidden = false;
+    if (android) {
+      // Opens the game if it's installed, else the Play Store with the challenge as the install referrer.
+      // The fields go in the query here: an intent: link keeps its own part after the #.
+      open.href = 'intent://challenge?' + raw + '#Intent;scheme=kangaroojump;package=' + PKG +
+        ';S.browser_fallback_url=' + encodeURIComponent(playLink) + ';end';
+    } else {
+      open.href = 'kangaroojump://challenge?' + raw;
+    }
+  }
+
+  // Straight on to the right store (or the game) for phones; a computer just sees the page.
+  if (android) {
+    var go = document.getElementById(ok ? 'open' : 'play').href;
+    setTimeout(function () { location.href = go; }, 300);
+  } else if (ios) {
+    // The App Store page says "Open" if the game is already there (Universal Links open it before this page).
+    setTimeout(function () { if (!document.hidden) location.href = APPSTORE; }, 1500);
+  }
+})();
+</script>
+</body>
+</html>
