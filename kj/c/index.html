@@ -47,6 +47,9 @@
     if (i > 0) { try { p[kv.slice(0, i)] = decodeURIComponent(kv.slice(i + 1).replace(/\+/g, ' ')); } catch (e) {} }
   });
   var ok = /^\d{4}-\d{2}-\d{2}$/.test(p.d || '') && /^\d{1,5}$/.test(p.s || '') && /^[0-9a-z]{4}$/.test(p.k || '');
+  // A friend's race room (RaceNet.inviteLink): #r=CODE, four letters (RaceNet.readCode).
+  var room = (p.r || '').toUpperCase().replace(/[\s-]/g, '');
+  if (!/^[A-HJ-NP-Z]{4}$/.test(room)) room = null;
   var ua = navigator.userAgent || '';
   var android = /Android/i.test(ua);
   var ios = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && 'ontouchend' in document);
@@ -55,7 +58,21 @@
   var playLink = ok ? PLAY + '&referrer=' + encodeURIComponent(raw) : PLAY;
   document.getElementById('play').href = playLink;
 
-  if (ok) {
+  if (room) {
+    document.getElementById('title').textContent = 'A friend invites you to a race!';
+    document.getElementById('dare').textContent = 'Join their Kangaroo Jump race room:';
+    var code = document.getElementById('score');
+    code.textContent = room; code.hidden = false;
+    var note = document.getElementById('what');
+    note.textContent = 'Open the game to join. No game yet? Get it below, then open this link again.'; note.hidden = false;
+    var join = document.getElementById('open');
+    join.textContent = 'Join the race';
+    join.hidden = false;
+    join.href = android
+      ? 'intent://challenge?r=' + room + '#Intent;scheme=kangaroojump;package=' + PKG +
+        ';S.browser_fallback_url=' + encodeURIComponent(playLink) + ';end'
+      : 'kangaroojump://challenge?r=' + room;
+  } else if (ok) {
     var name = (p.n || '').slice(0, 32);
     var date = new Date(p.d + 'T12:00:00');
     var day = isNaN(date) ? p.d : date.toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
@@ -80,10 +97,12 @@
 
   // Straight on to the right store (or the game) for phones; a computer just sees the page.
   if (android) {
-    var go = document.getElementById(ok ? 'open' : 'play').href;
+    var go = document.getElementById(ok || room ? 'open' : 'play').href;
     setTimeout(function () { location.href = go; }, 300);
-  } else if (ios) {
-    // The App Store page says "Open" if the game is already there (Universal Links open it before this page).
+  } else if (ios && !ok && !room) {
+    // The App Store page says "Open" if the game is already there. A challenge or a room stays on this page:
+    // Universal Links open the game before it, and where they don't (an app's own browser, a link typed in),
+    // its button opens the game, so the App Store mustn't take the page away first.
     setTimeout(function () { if (!document.hidden) location.href = APPSTORE; }, 1500);
   }
 })();
