@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,10 +8,14 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Race your friends across Australia. Free on iPhone, iPad, Android and Wear OS.">
 <link rel="canonical" href="https://matanyaasis288.github.io/kj/">
+<link rel="alternate" hreflang="en" href="https://matanyaasis288.github.io/kj/">
+<link rel="alternate" hreflang="he" href="https://matanyaasis288.github.io/kj/he/">
+<link rel="alternate" hreflang="x-default" href="https://matanyaasis288.github.io/kj/">
 <meta name="theme-color" content="#191331">
 <meta name="apple-itunes-app" content="app-id=6819964662">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kangaroo Jump">
+<meta property="og:locale" content="en_US">
 <meta property="og:title" content="Kangaroo Jump: race your friends across Australia">
 <meta property="og:description" content="Online races for up to four kangaroos, then 110 levels chasing Boss Maggie's magpie gang. Free on iPhone, iPad, Android and Wear OS.">
 <meta property="og:url" content="https://matanyaasis288.github.io/kj/">
@@ -121,6 +125,9 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 400; letter-spacing: .0
 .bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .6rem; }
 .bar .name { display: flex; align-items: center; gap: .6rem; font: 1.25rem/1 var(--f-display); color: var(--cream); }
 .bar .name img { width: 2.3rem; height: 2.3rem; border-radius: 22%; }
+.bar .end { display: flex; align-items: center; gap: .9rem; }
+.bar .lang { color: var(--cream); font-weight: 800; font-size: var(--step--1); text-decoration: none; border: 2px solid rgba(255, 241, 214, .45); border-radius: 999px; padding: .3rem .85rem; }
+.bar .lang:hover { background: rgba(255, 241, 214, .12); }
 .bar .stores { display: flex; gap: .5rem; }
 .bar .stores img { height: 2.3rem; width: auto; display: block; }
 .badge { display: inline-flex; border-radius: 10px; transition: transform .15s ease; }
@@ -140,12 +147,15 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 400; letter-spacing: .0
   clip-path: polygon(0 0, 88.2% 0, 100% 50%, 88.2% 100%, 0 100%); transition: background-color .15s ease; }
 .post-art .hit.big { clip-path: polygon(0 0, 87.1% 0, 100% 50%, 87.1% 100%, 0 100%); }
 .post-art .hit.left { clip-path: polygon(11.8% 0, 100% 0, 100% 100%, 11.8% 100%, 0 50%); }
+:root[dir="rtl"] .post-art .hit { clip-path: polygon(11.8% 0, 100% 0, 100% 100%, 11.8% 100%, 0 50%); }
+:root[dir="rtl"] .post-art .hit.big { clip-path: polygon(12.9% 0, 100% 0, 100% 100%, 12.9% 100%, 0 50%); }
+:root[dir="rtl"] .post-art .hit.left { clip-path: polygon(0 0, 88.2% 0, 100% 50%, 88.2% 100%, 0 100%); }
 .post-art .hit:hover { background-color: rgba(255, 244, 214, .16); }
 .post-art .hit:focus-visible { background-color: rgba(255, 210, 31, .38); }
 
 .under { text-align: center; padding-bottom: 1rem; }
 .under p { margin: 0 auto; max-width: 36rem; color: var(--ink-2); font-weight: 800; }
-.going { display: none; margin: 1rem auto 0; align-items: center; gap: .7rem; padding: .7rem 1rem; border-radius: 12px; background: rgba(255,255,255,.35); max-width: 30rem; text-align: left; }
+.going { display: none; margin: 1rem auto 0; align-items: center; gap: .7rem; padding: .7rem 1rem; border-radius: 12px; background: rgba(255,255,255,.35); max-width: 30rem; text-align: start; }
 [data-going="yes"][data-platform="ios"] .going, [data-going="yes"][data-platform="android"] .going,
 [data-framed="yes"][data-platform="ios"] .going, [data-framed="yes"][data-platform="android"] .going { display: flex; }
 .hop { width: 1.5rem; height: 1.5rem; flex: none; border-radius: 50%; background: var(--sign); box-shadow: 0 4px 0 var(--ink); animation: hop .7s ease-in-out infinite alternate; }
@@ -155,7 +165,7 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 400; letter-spacing: .0
 [data-platform="desktop"] .scan { display: flex; }
 .scan .qr { width: 5.2rem; height: 5.2rem; flex: none; padding: .4rem; background: var(--tile); border-radius: 10px; box-shadow: 0 4px 0 #8a5a3a; }
 .scan .qr svg { width: 100%; height: 100%; display: block; }
-.scan p { margin: 0; font-size: var(--step--1); color: var(--ink-2); max-width: 15rem; text-align: left; font-weight: 700; }
+.scan p { margin: 0; font-size: var(--step--1); color: var(--ink-2); max-width: 15rem; text-align: start; font-weight: 700; }
 
 /* The playable taste, framed like a screen standing in the sky */
 .level1 { padding-block: 3rem 1rem; }
@@ -269,9 +279,12 @@ h1, h2, h3 { font-family: var(--f-display); font-weight: 400; letter-spacing: .0
 <header class="bar">
   <div class="wrap">
     <span class="name"><img src="img/icon.webp" width="37" height="37" alt="">Kangaroo Jump</span>
+    <span class="end">
+    <a class="lang" href="he/" hreflang="he" lang="he">עברית</a>
     <span class="stores">
       <a class="badge ios" href="https://apps.apple.com/app/id6819964662"><img src="img/app-store-badge.svg" width="111" height="37" alt="Download on the App Store"></a>
       <a class="badge play" href="https://play.google.com/store/apps/details?id=com.asis.kangaroojump"><img src="img/google-play-badge.png" width="124" height="37" alt="Get it on Google Play"></a>
+    </span>
     </span>
   </div>
 </header>

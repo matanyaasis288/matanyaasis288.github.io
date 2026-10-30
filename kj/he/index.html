@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; media-src 'self'; font-src 'self'">
+<title>Kangaroo Jump</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="התחרו מול חברים אונליין, ורדפו אחרי כנופיית העקעקים ב-110 שלבים! חינם ל-iPhone, ל-iPad, לאנדרואיד ול-Wear OS.">
+<link rel="canonical" href="https://matanyaasis288.github.io/kj/he/">
+<link rel="alternate" hreflang="en" href="https://matanyaasis288.github.io/kj/">
+<link rel="alternate" hreflang="he" href="https://matanyaasis288.github.io/kj/he/">
+<link rel="alternate" hreflang="x-default" href="https://matanyaasis288.github.io/kj/">
+<meta name="theme-color" content="#191331">
+<meta name="apple-itunes-app" content="app-id=6819964662">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kangaroo Jump">
+<meta property="og:locale" content="he_IL">
+<meta property="og:title" content="Kangaroo Jump: התחרו מול חברים ברחבי אוסטרליה">
+<meta property="og:description" content="מרוצים אונליין של עד ארבעה קנגורואים, ו-110 שלבים במרדף אחרי כנופיית העקעקים של הבוסית מאגי. חינם ל-iPhone, ל-iPad, לאנדרואיד ול-Wear OS.">
+<meta property="og:url" content="https://matanyaasis288.github.io/kj/he/">
+<meta property="og:image" content="https://matanyaasis288.github.io/kj/img/og.jpg">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="500">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="../img/favicon.png">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<style>img { max-width: 100%; } [hidden] { display: none !important; } :root { padding-top: env(safe-area-inset-top, 0px); }</style>
+</head>
+<body>
+<!--FONTS-->
+<style>
+@font-face { font-family: "Kangaroo Sign"; src: url("../img/kangaroo-sign.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Fredoka"; src: url("../img/fredoka.woff2") format("woff2"); font-weight: 300 700; font-display: swap; }
+</style>
+<!--/FONTS-->
+<script>
+/* Sends phones straight to their store. Runs first, before anything paints. */
+(function () {
+  var PLAY = 'https://play.google.com/store/apps/details?id=com.asis.kangaroojump';
+  var APPSTORE = 'https://apps.apple.com/app/id6819964662';
+  var ua = navigator.userAgent || '';
+  var platform = /Android/i.test(ua) ? 'android'
+    : (/iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 0)) ? 'ios'
+    : 'desktop';
+  // Campaign tags on this page's link (?utm_source=…) ride along to Play as the install referrer.
+  var tags = [];
+  location.search.replace(/^\?/, '').split('&').forEach(function (kv) {
+    if (/^utm_[a-z]+=/.test(kv)) tags.push(kv);
+  });
+  if (tags.length) PLAY += '&referrer=' + encodeURIComponent(tags.join('&'));
+  var framed = true;
+  try { framed = window.top !== window.self; } catch (e) {}
+  var stay = /(^|[?&#])stay\b/.test(location.search + location.hash);
+  var bot = /bot|crawl|spider|slurp|facebookexternalhit|embedly|preview|whatsapp|telegram|discord|slack/i.test(ua);
+  var root = document.documentElement;
+  root.setAttribute('data-platform', platform);
+  root.setAttribute('data-framed', framed ? 'yes' : 'no');
+  window.KJ = { PLAY: PLAY, APPSTORE: APPSTORE, platform: platform };
+  if (platform !== 'desktop' && !framed && !stay && !bot) {
+    root.setAttribute('data-going', 'yes');
+    location.replace(platform === 'ios' ? APPSTORE : PLAY);
+  }
+})();
+</script>
+<style>
+/* Layout: the app's Home screen as a page. The same dusk sky runs from the top bar down to the horizon, the real
+   road sign and title plate (rendered by the app's own code) stand on their post at the top, and the post's wooden
+   arrows point to the stores. Below: the playable taste, the comic, the race room, the watch, and the ground. */
+:root {
+  --sky-0: #4a3152;
+  --sky-1: #5a3a55;
+  --sky-2: #b96566;
+  --sky-3: #c97066;
+  --sky-4: #e38f6e;
+  --sky-5: #fdbd7c;
+  --ground: #8a3a18;
+  --ground-deep: #3d170a;
+  --sun: #ffc24d;
+  --sign: #ffd21f;
+  --paper: #fbefd2;
+  --ink: #241105;
+  --ink-2: #4a2416;
+  --wood: #c79a5f;
+  --wood-edge: #4a2d14;
+  --post: #3f2915;
+  --tile: #fffaf0;
+  --cream: #fff1d6;
+  --green: #3f9b3a;
+  --f-display: "Lilita One", "Arial Rounded MT Bold", "Trebuchet MS", system-ui, sans-serif;
+  --f-body: "Nunito", ui-rounded, "Segoe UI", system-ui, -apple-system, sans-serif;
+  --step--1: .875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.35rem;
+  --step-2: clamp(1.7rem, 1.25rem + 1.8vw, 2.5rem);
+  --step-3: clamp(2.6rem, 1.5rem + 4.6vw, 5rem);
+    color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { background: var(--sky-0); }
+body {
+  margin: 0;
+  color: var(--ink);
+  font: 600 var(--step-0)/1.55 var(--f-body);
+  /* One sky from top to bottom, Home's dusk: purple overhead to pink, then orange low down. */
+  background: linear-gradient(180deg, var(--sky-0) 0, var(--sky-1) 6rem, #7a4a62 22rem, var(--sky-2) 44rem,
+    var(--sky-3) 80rem, var(--sky-4) 150rem, var(--sky-5) 100%);
+  overflow-x: hidden;
+}
+.wrap {
+  max-width: 70rem;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+a { color: var(--ink); }
+a:focus-visible, button:focus-visible, iframe:focus-visible { outline: 3px solid var(--sign); outline-offset: 3px; border-radius: 6px; }
+h1, h2, h3 { font-family: var(--f-display); font-weight: 400; letter-spacing: .01em; text-wrap: balance; margin: 0; }
+.outline {
+  color: var(--sun);
+  text-shadow: -.045em -.045em 0 var(--ink), .045em -.045em 0 var(--ink), -.045em .045em 0 var(--ink), .045em .045em 0 var(--ink),
+    0 -.06em 0 var(--ink), 0 .06em 0 var(--ink), -.06em 0 0 var(--ink), .06em 0 0 var(--ink), 0 .13em 0 var(--ink);
+}
+
+/* Top bar: the top of the sky */
+.bar { background: var(--sky-0); }
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .6rem; }
+.bar .name { display: flex; align-items: center; gap: .6rem; font: 1.25rem/1 var(--f-display); color: var(--cream); }
+.bar .name img { width: 2.3rem; height: 2.3rem; border-radius: 22%; }
+.bar .end { display: flex; align-items: center; gap: .9rem; }
+.bar .lang { color: var(--cream); font-weight: 800; font-size: var(--step--1); text-decoration: none; border: 2px solid rgba(255, 241, 214, .45); border-radius: 999px; padding: .3rem .85rem; }
+.bar .lang:hover { background: rgba(255, 241, 214, .12); }
+.bar .stores { display: flex; gap: .5rem; }
+.bar .stores img { height: 2.3rem; width: auto; display: block; }
+.badge { display: inline-flex; border-radius: 10px; transition: transform .15s ease; }
+.badge img { height: 3.4rem; width: auto; display: block; }
+.badge:hover { transform: translateY(-2px); }
+[data-platform="android"] .badge.ios, [data-platform="ios"] .badge.play { order: 2; opacity: .6; }
+
+/* The signpost: Home's sign, plate, post and arrows, drawn by the app's own code (LandingSignpost) on a clear
+   background; the links sit over the arrows. */
+.signpost { position: relative; display: grid; justify-items: center; padding-top: 1.5rem; }
+.signpost h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.post-art { position: relative; width: min(26rem, 100%); margin-bottom: 1.2rem; }
+.post-art img { display: block; width: 100%; height: auto;
+  -webkit-mask-image: linear-gradient(180deg, #000 93%, transparent 100%); mask-image: linear-gradient(180deg, #000 93%, transparent 100%); }
+.post-art .hit { position: absolute; display: block; color: transparent; font-size: 1px; overflow: hidden; outline: none;
+  /* The arrow's own outline (its tip is half its height), so the highlight never shows as a box */
+  clip-path: polygon(0 0, 88.2% 0, 100% 50%, 88.2% 100%, 0 100%); transition: background-color .15s ease; }
+.post-art .hit.big { clip-path: polygon(0 0, 87.1% 0, 100% 50%, 87.1% 100%, 0 100%); }
+.post-art .hit.left { clip-path: polygon(11.8% 0, 100% 0, 100% 100%, 11.8% 100%, 0 50%); }
+:root[dir="rtl"] .post-art .hit { clip-path: polygon(11.8% 0, 100% 0, 100% 100%, 11.8% 100%, 0 50%); }
+:root[dir="rtl"] .post-art .hit.big { clip-path: polygon(12.9% 0, 100% 0, 100% 100%, 12.9% 100%, 0 50%); }
+:root[dir="rtl"] .post-art .hit.left { clip-path: polygon(0 0, 88.2% 0, 100% 50%, 88.2% 100%, 0 100%); }
+.post-art .hit:hover { background-color: rgba(255, 244, 214, .16); }
+.post-art .hit:focus-visible { background-color: rgba(255, 210, 31, .38); }
+
+.under { text-align: center; padding-bottom: 1rem; }
+.under p { margin: 0 auto; max-width: 36rem; color: var(--ink-2); font-weight: 800; }
+.going { display: none; margin: 1rem auto 0; align-items: center; gap: .7rem; padding: .7rem 1rem; border-radius: 12px; background: rgba(255,255,255,.35); max-width: 30rem; text-align: start; }
+[data-going="yes"][data-platform="ios"] .going, [data-going="yes"][data-platform="android"] .going,
+[data-framed="yes"][data-platform="ios"] .going, [data-framed="yes"][data-platform="android"] .going { display: flex; }
+.hop { width: 1.5rem; height: 1.5rem; flex: none; border-radius: 50%; background: var(--sign); box-shadow: 0 4px 0 var(--ink); animation: hop .7s ease-in-out infinite alternate; }
+@keyframes hop { from { transform: translateY(2px) scale(1.06, .92); } to { transform: translateY(-8px); } }
+.going small { display: block; color: var(--ink-2); font-size: var(--step--1); }
+.scan { display: none; align-items: center; justify-content: center; gap: .9rem; margin-top: 1rem; }
+[data-platform="desktop"] .scan { display: flex; }
+.scan .qr { width: 5.2rem; height: 5.2rem; flex: none; padding: .4rem; background: var(--tile); border-radius: 10px; box-shadow: 0 4px 0 #8a5a3a; }
+.scan .qr svg { width: 100%; height: 100%; display: block; }
+.scan p { margin: 0; font-size: var(--step--1); color: var(--ink-2); max-width: 15rem; text-align: start; font-weight: 700; }
+
+/* The playable taste, framed like a screen standing in the sky */
+.level1 { padding-block: 3rem 1rem; }
+.level1 h2 { font-size: var(--step-2); margin-bottom: 1.2rem; }
+.screen { position: relative; aspect-ratio: 16 / 9; max-height: 80vh; width: 100%; border-radius: 22px; padding: 10px; background: #2a1a12; box-shadow: 0 0 0 3px #6b4226, 0 26px 50px rgba(60, 20, 10, .45); }
+.screen iframe { display: block; width: 100%; height: 100%; border: 0; border-radius: 14px; background: #6f5a73; }
+.level1 .how { margin: .9rem 0 0; font-size: var(--step--1); color: var(--ink-2); font-weight: 700; }
+.level1 .how kbd { font: 800 .8rem/1 var(--f-body); background: var(--tile); border: 1px solid currentColor; border-bottom-width: 3px; border-radius: 5px; padding: .15rem .4rem; }
+.level1 .how .touch { display: none; }
+@media (hover: none), (pointer: coarse) { .level1 .how .touch { display: inline; } .level1 .how .mouse { display: none; } }
+</style>
+<style>
+/* The comic: the game's own panels, inked borders, yellow caption boxes */
+.comic { padding-block: 3rem 2rem; }
+.comic h2 { font-size: var(--step-2); margin-bottom: 1.5rem; }
+.page {
+  display: grid; gap: 14px; padding: 14px; background: var(--paper); border-radius: 6px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  box-shadow: 0 24px 50px rgba(0,0,0,.45); transform: rotate(.6deg);
+}
+/* Each panel: the picture whole, its caption in a strip under it (never over a character) */
+.panel { position: relative; margin: 0; border: 4px solid var(--ink); background: #fff; overflow: hidden; min-width: 0; display: flex; flex-direction: column; }
+.panel > img { display: block; width: 100%; height: auto; aspect-ratio: 1; }
+.panel figcaption {
+  flex: 1; background: #ffe066; color: var(--ink); border-top: 4px solid var(--ink); padding: .5rem .7rem;
+  font: 900 .95rem/1.3 var(--f-body);
+}
+.panel.end { grid-column: span 2; }
+.panel.end { display: grid; place-content: center; gap: .8rem; text-align: center; padding: 1rem; background: radial-gradient(circle at 50% 40%, #fff6d8, #ffd77a); }
+.panel.end b { font: 400 var(--step-2)/1 var(--f-display); color: var(--ink); }
+.panel.end span { color: #6b4a2a; font-weight: 800; font-size: var(--step--1); }
+.panel.end .badge img { height: 2.7rem; }
+.panel.end .cta { margin: 0; justify-content: center; }
+
+/* The race room */
+.race { padding-block: 4rem 2rem; }
+.race .wrap { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+.race h2 { font-size: var(--step-2); line-height: 1.1; }
+.race p { margin: .9rem 0 0; max-width: 34rem; color: var(--ink-2); }
+.room { background: linear-gradient(180deg, #7a4626, var(--wood)); border-radius: 18px; padding: 1.4rem; box-shadow: inset 0 0 0 3px rgba(0,0,0,.18), 0 20px 40px rgba(0,0,0,.45); transform: rotate(1.2deg); }
+.room .card { background: var(--paper); color: var(--ink); border-radius: 12px; padding: 1.1rem 1rem 1.2rem; text-align: center; box-shadow: 0 5px 0 rgba(0,0,0,.25); }
+.room .label { font: 800 var(--step--1)/1 var(--f-body); color: #8a6440; font-style: italic; }
+.tiles { display: flex; justify-content: center; gap: .55rem; margin-top: .8rem; perspective: 400px; }
+.tiles span { font: 2.6rem/1 var(--f-display); width: 3.6rem; padding-block: .55rem .45rem; background: var(--tile); border-radius: 10px; box-shadow: 0 5px 0 #b4874f, inset 0 0 0 2px #e7cf9a; color: var(--ink); transition: transform .35s cubic-bezier(.3, 1.6, .5, 1); }
+.tiles span.flip { transform: rotateX(90deg); }
+.invite { margin-top: 1rem; display: inline-block; padding: .55rem 1.1rem; border-radius: 999px; background: var(--green); color: #fff; font-weight: 900; text-transform: uppercase; font-size: var(--step--1); box-shadow: 0 4px 0 #22601f; }
+.seats { margin-top: 1rem; display: grid; gap: .45rem; }
+.seats div { display: flex; justify-content: space-between; align-items: center; background: #f3dba4; color: var(--ink); border-radius: 10px; padding: .5rem .8rem; font-weight: 900; box-shadow: 0 3px 0 #c6a462; }
+.seats div:first-child { background: #f0c766; box-shadow: 0 3px 0 #b07f2a; }
+.seats small { font-weight: 800; color: #7b5a36; }
+
+/* The watch */
+.watch-row { padding-block: 4rem 1rem; }
+.watch-row .wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; }
+.watches { display: flex; align-items: center; gap: 1rem; }
+.watch { width: min(12rem, 40vw); aspect-ratio: 1; max-width: 100%; border-radius: 50%; padding: .65rem; background: #15101c; box-shadow: 0 0 0 4px #3a3340, 0 20px 40px rgba(0,0,0,.5); }
+.watch img { width: 100%; height: 100%; border-radius: 50%; display: block; }
+.watch.small { width: min(9rem, 30vw); transform: translateY(1.2rem); }
+.watch-row h2 { font-size: var(--step-2); line-height: 1.1; }
+.watch-row p { margin: .9rem 0 0; max-width: 34rem; color: var(--ink-2); }
+
+</style>
+<style>
+/* The ground, as on Home: a red dirt line, then dark earth */
+.ground { margin-top: 4rem; background: linear-gradient(180deg, #b4552a 0, var(--ground) 10px, #6a2a10 4rem, var(--ground-deep) 100%); border-top: 4px solid #d0743f; color: var(--cream); }
+.ground .wrap { padding-block: 2.5rem calc(2.5rem + env(safe-area-inset-bottom, 0px)); display: grid; gap: 1.2rem; justify-items: start; }
+.ground .cta { display: flex; flex-wrap: wrap; gap: .75rem; }
+.ground .small-print { font-size: var(--step--1); color: #e8c3a6; max-width: 44rem; margin: 0; }
+.ground .links { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; font-size: var(--step--1); color: #e8c3a6; }
+.ground .links a { color: #ffe1a8; }
+
+/* Review bar, only in the preview (the page shown inside another page), never on the live site */
+.review { display: none; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: #120d1c; border-bottom: 1px solid rgba(255,228,190,.16); color: #e6d2e0; }
+[data-framed="yes"] .review { display: block; }
+.review .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding-block: .6rem; font-size: var(--step--1); }
+.review .seg { display: inline-flex; background: #241a36; border-radius: 999px; padding: 3px; }
+.review button { font: 800 var(--step--1)/1 var(--f-body); color: #e6d2e0; background: none; border: 0; padding: .5rem .85rem; border-radius: 999px; cursor: pointer; }
+.review button[aria-pressed="true"] { background: var(--sign); color: var(--ink); }
+.review p { margin: 0; flex: 1 1 18rem; min-width: 0; }
+
+@media (max-width: 860px) {
+  .race .wrap, .watch-row .wrap { grid-template-columns: minmax(0, 1fr); }
+  .room { max-width: 30rem; width: 100%; justify-self: center; }
+  .page { grid-template-columns: 1fr 1fr; }
+  .bar .stores { display: none; }
+}
+@media (max-width: 480px) {
+  .page { grid-template-columns: minmax(0, 1fr); transform: none; }
+  .panel.end { grid-column: auto; }
+  .tiles span { width: 3rem; font-size: 2.1rem; }
+  .badge img { height: 3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hop { animation: none; }
+  .badge, .tiles span { transition: none; }
+}
+</style>
+
+<style>
+/* Hebrew: the game's Hebrew sign font (Lilita One with Fredoka's Hebrew, "Kangaroo Sign") for titles, Fredoka for text */
+:root { --f-display: "Kangaroo Sign", "Arial Rounded MT Bold", system-ui, sans-serif; --f-body: "Fredoka", "Arial Hebrew", system-ui, sans-serif; }
+body { font-weight: 500; }
+.panel figcaption { font-weight: 600; font-size: 1rem; }
+.outline { letter-spacing: 0; }
+</style>
+
+<div class="review" role="region" aria-label="תצוגה מקדימה">
+  <div class="wrap">
+    <span class="seg" role="group" aria-label="להציג כמו">
+      <button type="button" id="as-ios" data-as="ios">iPhone</button>
+      <button type="button" id="as-android" data-as="android">אנדרואיד</button>
+      <button type="button" id="as-desktop" data-as="desktop">מחשב</button>
+    </span>
+    <p id="review-note"></p>
+  </div>
+</div>
+
+<header class="bar">
+  <div class="wrap">
+    <span class="name"><img src="../img/icon.webp" width="37" height="37" alt="">Kangaroo Jump</span>
+    <span class="end">
+    <a class="lang" href="../" hreflang="en" lang="en">English</a>
+    <span class="stores">
+      <a class="badge ios" href="https://apps.apple.com/app/id6819964662"><img src="../img/app-store-badge.svg" width="111" height="37" alt="הורידו מה-App Store"></a>
+      <a class="badge play" href="https://play.google.com/store/apps/details?id=com.asis.kangaroojump"><img src="../img/google-play-badge-he.png" width="124" height="37" alt="כעת ב-Google Play"></a>
+    </span>
+    </span>
+  </div>
+</header>
+
+<section class="post-band">
+  <div class="wrap signpost">
+    <h1>Kangaroo Jump</h1>
+    <div class="post-art">
+      <img src="../img/signpost-he.webp" width="900" height="1216" alt="">
+      <a class="hit big" href="#play" style="right:45.9%;top:64.9%;width:52.7%;height:10.1%">נסו עכשיו</a>
+      <a class="hit left ios" id="arrow-ios" href="https://apps.apple.com/app/id6819964662" style="right:0.8%;top:77.1%;width:49.8%;height:8.7%">App Store</a>
+      <a class="hit badge play" id="arrow-play" href="https://play.google.com/store/apps/details?id=com.asis.kangaroojump" style="right:45.9%;top:87.9%;width:49.8%;height:8.7%">Google Play</a>
+    </div>
+    <div class="under">
+      <p>רדפו אחרי כנופיית העקעקים של הבוסית מאגי ב-110 שלבים, והתחרו מול עד שלושה חברים אונליין. חינם ל-iPhone, ל-iPad, לאנדרואיד ול-Wear OS.</p>
+      <div class="going" role="status">
+        <span class="hop" aria-hidden="true"></span>
+        <span><b id="going-text">פותחים את החנות שלכם…</b><small id="going-sub">אם שום דבר לא קורה, הקישו על השלט של החנות שלכם למעלה.</small></span>
+      </div>
+      <div class="scan">
+        <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="QR code for this page"><path class="qrline" stroke="#2a1508" d="M0 0.5h7m1 0h2m3 0h2m2 0h2m1 0h1m1 0h7m-29 1h1m5 0h1m2 0h6m1 0h2m1 0h2m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m7 0h1m4 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m3 0h1m3 0h1m1 0h3m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h2m2 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h1m1 0h3m4 0h1m1 0h2m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h3m2 0h1m2 0h3m-19 1h1m3 0h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m3 0h5m2 0h1m-29 1h1m1 0h3m4 0h2m2 0h6m1 0h1m1 0h7m-28 1h4m1 0h1m4 0h2m2 0h1m1 0h1m10 0h1m-29 1h1m1 0h2m3 0h1m1 0h1m1 0h2m1 0h1m1 0h4m1 0h1m1 0h1m1 0h1m1 0h2m-29 1h4m2 0h1m1 0h4m1 0h3m1 0h1m1 0h1m1 0h1m5 0h1m-28 1h1m1 0h1m1 0h2m2 0h5m2 0h2m3 0h9m-29 1h1m1 0h1m1 0h3m1 0h1m2 0h1m1 0h3m1 0h2m1 0h2m1 0h1m1 0h2m1 0h1m-29 1h1m1 0h3m2 0h5m1 0h1m3 0h1m1 0h1m2 0h1m4 0h2m-29 1h1m5 0h1m1 0h3m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m-28 1h2m1 0h3m5 0h1m1 0h3m1 0h2m3 0h4m1 0h2m-26 1h1m2 0h2m1 0h2m4 0h1m1 0h1m2 0h3m3 0h1m1 0h1m-27 1h1m2 0h1m3 0h2m3 0h1m2 0h1m4 0h2m3 0h2m-29 1h2m2 0h1m1 0h3m3 0h4m1 0h1m2 0h6m2 0h1m-21 1h1m3 0h1m2 0h2m2 0h2m3 0h1m3 0h1m-29 1h7m1 0h1m1 0h1m1 0h4m1 0h4m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m3 0h1m2 0h1m1 0h6m3 0h1m2 0h2m-29 1h1m1 0h3m1 0h1m1 0h2m1 0h3m1 0h1m1 0h1m1 0h7m1 0h1m-28 1h1m1 0h3m1 0h1m3 0h7m1 0h1m2 0h1m6 0h1m-29 1h1m1 0h3m1 0h1m2 0h1m3 0h1m1 0h2m4 0h1m3 0h4m-29 1h1m5 0h1m2 0h1m1 0h2m1 0h1m2 0h1m1 0h4m2 0h1m1 0h2m-29 1h7m1 0h2m2 0h1m2 0h1m1 0h2m1 0h2m1 0h1m1 0h1m1 0h1"/></svg></div>
+        <p>על המחשב? סרקו את הקוד במצלמת הטלפון, והוא יפתח את החנות של הטלפון שלכם.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="level1" id="play" aria-labelledby="h-play">
+  <div class="wrap">
+    <h2 id="h-play" class="outline">נסו את המשחק כאן</h2>
+    <div class="screen"><iframe src="../play/index.html" title="טעימה קצרה מ-Kangaroo Jump שאפשר לשחק" loading="lazy" allow="autoplay"></iframe></div>
+    <p class="how"><span class="mouse">טעימה קצרה מהמשחק. לחצו כדי לקפוץ, גררו למטה כדי להתכופף, גררו למעלה למטרייה, או השתמשו ב-<kbd>↑</kbd> <kbd>↓</kbd>. באפליקציה יש 110 שלבים.</span><span class="touch">טעימה קצרה מהמשחק. הקישו כדי לקפוץ, החליקו למטה כדי להתכופף, החליקו למעלה למטרייה. באפליקציה יש 110 שלבים.</span></p>
+  </div>
+</section>
+<section class="comic" aria-labelledby="h-heist">
+  <div class="wrap">
+    <h2 id="h-heist" class="outline">שוד העקעקים</h2>
+    <div class="page">
+      <figure class="panel"><img src="../img/comic-1sq.webp" width="540" height="540" loading="lazy" alt="רו עם ג׳ואי בכיס, ליד שמיכת פיקניק ובומרנג המזל"><figcaption>רו הוא אבא חד-הורי. ג׳ואי נוסע איתו לכל מקום בכיס.</figcaption></figure>
+      <figure class="panel"><img src="../img/comic-2.webp" width="320" height="320" loading="lazy" alt="הבוסית מאגי, עקעקה עם כתר, עפה עם הבומרנג"><figcaption>ואז הבוסית מאגי גנבה את בומרנג המזל שלהם.</figcaption></figure>
+      <figure class="panel"><img src="../img/comic-3.webp" width="320" height="320" loading="lazy" alt="רו צועק ביער הגשם"><figcaption>רו לא התכוון לוותר.</figcaption></figure>
+      <figure class="panel"><img src="../img/comic-4.webp" width="320" height="320" loading="lazy" alt="רו קופץ בשלג"><figcaption>דרך 11 עולמות, מהאאוטבק ועד ארץ השלג.</figcaption></figure>
+      <div class="panel end">
+        <b>תורכם</b>
+        <span>ההמשך בטלפון שלכם</span>
+        <div class="cta">
+          <a class="badge ios" href="https://apps.apple.com/app/id6819964662"><img src="../img/app-store-badge.svg" width="129" height="43" alt="הורידו מה-App Store" loading="lazy"></a>
+          <a class="badge play" href="https://play.google.com/store/apps/details?id=com.asis.kangaroojump"><img src="../img/google-play-badge-he.png" width="145" height="43" alt="כעת ב-Google Play" loading="lazy"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="race" aria-labelledby="h-race">
+  <div class="wrap">
+    <div class="room" aria-label="דוגמה לחדר מרוץ">
+      <div class="card">
+        <div class="label">קוד החדר</div>
+        <div class="tiles" id="tiles" aria-hidden="true" dir="ltr"><span>K</span><span>Q</span><span>Z</span><span>R</span></div>
+        <div class="invite" aria-hidden="true">הזמנת חבר</div>
+      </div>
+      <div class="seats" aria-hidden="true">
+        <div>מתילדה <small>אני</small></div>
+        <div>קוקו <small>בחדר</small></div>
+        <div>נד <small>קנגורובוט</small></div>
+        <div>טילי <small>קנגורובוט</small></div>
+      </div>
+    </div>
+    <div>
+      <h2 id="h-race" class="outline">ארבע אותיות ואתם במרוץ</h2>
+      <p>פתחו חדר ושלחו את הקוד, קישור או קוד QR. עד ארבעה קנגורואים קופצים עד הדגל וזורקים בומרנגים, סלעים ואת הבוסית מאגי על המוביל. קנגורובוטים ממלאים כל מקום פנוי, כך שתמיד יש מרוץ מוכן, ושחקני אנדרואיד ו-iPhone מתחרים באותם חדרים.</p>
+      <p>פגיעה עולה בזמן, אף פעם לא בחיים. החדרים פרטיים ואין צ'אט.</p>
+    </div>
+  </div>
+</section>
+<section class="watch-row" aria-labelledby="h-watch">
+  <div class="wrap">
+    <div class="watches">
+      <div class="watch"><img src="../img/wear-r3_030.webp" width="300" height="300" loading="lazy" alt="מרוץ על שעון Wear OS עגול"></div>
+      <div class="watch small"><img src="../img/wear-104_015.webp" width="300" height="300" loading="lazy" alt="צמרת הקארי על שעון Wear OS עגול"></div>
+    </div>
+    <div>
+      <h2 id="h-watch" class="outline">או קפצו מהשעון</h2>
+      <p>בשעוני Wear OS כל השלבים בחינם וללא פרסומות. הקישו כדי לקפוץ, או הפעילו שליטה בתנועות זרוע והרימו את היד.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="ground">
+  <div class="wrap">
+    <div class="cta">
+      <a class="badge ios" href="https://apps.apple.com/app/id6819964662"><img src="../img/app-store-badge.svg" width="162" height="54" alt="הורידו מה-App Store" loading="lazy"></a>
+      <a class="badge play" href="https://play.google.com/store/apps/details?id=com.asis.kangaroojump"><img src="../img/google-play-badge-he.png" width="182" height="54" alt="כעת ב-Google Play" loading="lazy"></a>
+    </div>
+    <p class="small-print">משחק חינמי. במשחק בטלפון יש פרסומות, ורכישה אחת של "הסרת פרסומות" מכבה אותן ולא משנה שום דבר אחר. לא צריך חשבון.</p>
+    <div class="links">
+      <a href="https://matanyaasis288.github.io/kangaroojump-privacy-policy/">מדיניות פרטיות</a>
+      <a href="https://matanyaasis288.github.io/kangaroojump-privacy-policy/SUPPORT">תמיכה</a>
+      <span dir="ltr">© 2026 As Is</span>
+    </div>
+    <p class="small-print">App Store והלוגו של Apple הם סימנים מסחריים של <bdi>Apple Inc.</bdi><br>Google Play והלוגו של Google Play הם סימנים מסחריים של <bdi>Google LLC.</bdi></p>
+  </div>
+</footer>
+<script>
+(function () {
+  var KJ = window.KJ, root = document.documentElement;
+  var store = { ios: 'App Store', android: 'Google Play' };
+  document.querySelectorAll('.badge.play').forEach(function (a) { a.href = KJ.PLAY; });
+
+  function show(platform, preview) {
+    root.setAttribute('data-platform', platform);
+    if (platform !== 'desktop') {
+      document.getElementById('going-text').textContent = preview
+        ? 'המבקר הזה כבר נמצא ב-' + store[platform] + '.'
+        : 'פותחים את ' + store[platform] + '…';
+      document.getElementById('going-sub').textContent = preview
+        ? 'הדף החי שולח אותם ישר לשם. זה מה שהם רואים אם הם חוזרים לדף.'
+        : 'אם שום דבר לא קורה, הקישו על השלט של החנות שלכם למעלה.';
+    }
+    document.querySelectorAll('.review button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-as') === platform ? 'true' : 'false');
+    });
+    var note = document.getElementById('review-note');
+    if (note) note.textContent = platform === 'desktop'
+      ? 'במחשב הדף נשאר: טעימה מהמשחק, שתי החנויות וקוד QR לטלפון.'
+      : 'ב' + (platform === 'ios' ? 'iPhone או iPad' : 'טלפון או שעון אנדרואיד') + ' הדף החי קופץ ישר ל-' + store[platform] + '.';
+  }
+  show(KJ.platform, root.getAttribute('data-framed') === 'yes');
+  document.querySelectorAll('.review button').forEach(function (b) {
+    b.addEventListener('click', function () { show(b.getAttribute('data-as'), true); });
+  });
+  if (root.getAttribute('data-going') === 'yes') {
+    setTimeout(function () {
+      document.getElementById('going-text').textContent = 'Kangaroo Jump מחכה לכם ב-' + store[KJ.platform] + '.';
+    }, 2500);
+  }
+
+  // The room code flips to a new one now and then, like a fresh room.
+  var tiles = document.querySelectorAll('#tiles span');
+  var ABC = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    setInterval(function () {
+      tiles.forEach(function (t, i) {
+        setTimeout(function () {
+          t.classList.add('flip');
+          setTimeout(function () { t.textContent = ABC[Math.floor(Math.random() * ABC.length)]; t.classList.remove('flip'); }, 180);
+        }, i * 90);
+      });
+    }, 4000);
+  }
+})();
+</script>
+</body>
+</html>
